@@ -12,12 +12,12 @@ def test_health_check():
     response = client.get("/health")
 
     assert response.status_code == 200
-    assert response.json() == {"status": "healthy"}
+    assert response.json() == {"status": "ok", "service": "document-service"}
 
 
 def test_upload_document_requires_patient_id():
     response = client.post(
-        "/documents",
+        "/documents/",
         data={"patient_id": "   "},
         files={"file": ("test.txt", b"hello world", "text/plain")},
     )
@@ -46,7 +46,7 @@ def test_upload_document_returns_created_document(monkeypatch):
     )
 
     response = client.post(
-        "/documents",
+        "/documents/",
         data={"patient_id": "patient-123"},
         files={"file": ("sample.pdf", b"%PDF-1.4\n", "application/pdf")},
     )

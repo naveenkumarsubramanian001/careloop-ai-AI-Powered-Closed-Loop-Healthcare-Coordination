@@ -42,8 +42,9 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
-      - redis
+      - document-service
+      - patient-state
+      - task-service
 
   document-service:
     build: ./services/document-service
@@ -63,11 +64,19 @@ services:
       - OLLAMA_BASE_URL=http://ollama:11434
     depends_on:
       - ollama
+      - patient-state
 
   patient-state:
     build: ./services/patient-state
     ports:
       - "8003:8003"
+    depends_on:
+      - postgres
+
+  task-service:
+    build: ./services/task-service
+    ports:
+      - "8004:8004"
     depends_on:
       - postgres
 

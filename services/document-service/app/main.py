@@ -1,5 +1,9 @@
+import logging
+
 from fastapi import FastAPI
 from app.routes import documents
+
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="CareLoop Document Service")
 

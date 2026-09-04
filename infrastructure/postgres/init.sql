@@ -7,17 +7,20 @@ CREATE TABLE IF NOT EXISTS patients (
 );
 
 CREATE TABLE IF NOT EXISTS documents (
-    id UUID PRIMARY KEY,
+    id VARCHAR(50) PRIMARY KEY,
     patient_id VARCHAR(50) REFERENCES patients(id),
-    file_name VARCHAR(255) NOT NULL,
-    storage_path TEXT NOT NULL,
-    status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    filename VARCHAR(255) NOT NULL,
+    content_type VARCHAR(100) NOT NULL,
+    size INTEGER NOT NULL,
+    storage_key VARCHAR(500) UNIQUE NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'uploaded',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS document_embeddings (
     id UUID PRIMARY KEY,
-    document_id UUID REFERENCES documents(id),
+    document_id VARCHAR(50) REFERENCES documents(id),
     content TEXT NOT NULL,
     embedding vector(768)
 );
@@ -25,7 +28,7 @@ CREATE TABLE IF NOT EXISTS document_embeddings (
 CREATE TABLE IF NOT EXISTS clinical_events (
     id UUID PRIMARY KEY,
     patient_id VARCHAR(50) REFERENCES patients(id),
-    document_id UUID REFERENCES documents(id),
+    document_id VARCHAR(50) REFERENCES documents(id),
     event_type VARCHAR(100) NOT NULL,
     details JSONB,
     confidence FLOAT,

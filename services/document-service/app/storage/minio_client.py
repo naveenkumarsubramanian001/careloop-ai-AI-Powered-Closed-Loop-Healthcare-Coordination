@@ -14,11 +14,15 @@ class MinioStorage:
             secure=settings.MINIO_SECURE,
         )
         self.bucket_name = settings.MINIO_BUCKET
+        self._bucket_ready = False
 
     def ensure_bucket_exists(self):
         """Create the bucket if it does not already exist."""
+        if self._bucket_ready:
+            return
         if not self.client.bucket_exists(self.bucket_name):
             self.client.make_bucket(self.bucket_name)
+        self._bucket_ready = True
 
     async def upload(self, storage_key: str, content: bytes, content_type: str):
         self.client.put_object(
