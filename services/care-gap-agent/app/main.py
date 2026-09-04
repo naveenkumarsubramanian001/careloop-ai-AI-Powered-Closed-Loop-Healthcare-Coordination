@@ -36,7 +36,7 @@ def build_llm() -> ChatOllama:
     return ChatOllama(
         model=os.getenv("OLLAMA_MODEL", "llama3"),
         temperature=0,
-        base_url=os.getenv("OLLAMA_BASE_URL"),
+        base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
     )
 
 
